@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location Tracker</title>
+</head>
+<body>
+  <h1>Location Permission Request</h1>
+  <p>Click the button below to generate a Google Maps link for your current location.</p>
+  <button id="getLocation">Share Location</button>
+  <p id="output"></p>
+  <script>
+    document.getElementById('getLocation').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Generate Google Maps link
+            const googleMapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+
+            // Display the link to the user
+            const output = document.getElementById('output');
+            output.innerHTML = `Your location: <a href="${googleMapsLink}" target="_blank">${googleMapsLink}</a>`;
+
+            console.log("Google Maps Link:", googleMapsLink);
+          },
+          (error) => {
+            const errorMessage = {
+              1: "Permission denied.",
+              2: "Position unavailable.",
+              3: "Request timed out."
+            };
+            document.getElementById('output').textContent = errorMessage[error.code] || "An unknown error occurred.";
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    });
+  </script>
+</body>
+</html>
